@@ -129,8 +129,13 @@ class Partner(models.Model):
                 ('invoice_status', '!=', 'invoiced')
                 ])
 
+
             amount_total = 0
+
             for order in orders:
-                amount_total += order.amount_total
+                for order_line in order.order_line:
+                    if order_line.invoice_status != 'invoced':
+                        amount_total += order_line.price_total
+            
 
             partner.amount_due = amount_total
